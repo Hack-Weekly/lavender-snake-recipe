@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'django_tables2',
+  #  'app'
 ]
 
 MIDDLEWARE = [
@@ -139,8 +140,9 @@ EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 EMAIL_BACKEND="django.core.mail.backends.console.EmailBackend"
 AUTH_USER_MODEL="users.User"

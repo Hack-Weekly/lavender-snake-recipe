@@ -13,7 +13,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        image: seco:development
+        image: lsr:development
         container_name: lsr_django
         command: /app/docker/start.sh server
         depends_on:
@@ -24,8 +24,8 @@ services:
             - 8000:8000
         volumes:       
             - .:/app
-            - static_files:/app/static
-            - media_files:/app/media
+            - static_files:/app/static:rw
+            - media_files:/app/media:rw
 
     postgres:
         image: postgres:13.3-alpine
@@ -36,16 +36,4 @@ services:
             - .env
     
     
-    nginx:
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
-        image: nginx:development
-        ports:
-            - 80:80
-            - 443:443
-        depends_on:
-            - django
-        volumes:
-            - static_files:/app/static:ro
-            - media_files:/app/media:ro
+    

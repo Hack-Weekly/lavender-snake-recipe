@@ -3,5 +3,5 @@ from django.views.generic import TemplateView
 from django.http import Http404
 
 class HomeView(TemplateView):
-    template_name="setup.html"
+    template_name="home.html"
     

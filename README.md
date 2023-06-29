@@ -9,4 +9,4 @@
 	linux:
 	>sudo docker-compose up --build
 
-4. Visit 0.0.0.0 in browser
+4. Visit 0.0.0.0:8000 in browser
