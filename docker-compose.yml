@@ -1,0 +1,51 @@
+version: "3.8"
+
+volumes:
+    app_data:
+        name: lsr_app_data
+    static_files:
+        name: lsr_static_files
+    media_files:
+        name: lsr_media_files
+
+services:
+    django:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: seco:development
+        container_name: lsr_django
+        command: /app/docker/start.sh server
+        depends_on:
+            - postgres
+        env_file:
+            - .env
+        ports:
+            - 8000:8000
+        volumes:       
+            - .:/app
+            - static_files:/app/static
+            - media_files:/app/media
+
+    postgres:
+        image: postgres:13.3-alpine
+        hostname: lsr-postgres
+        volumes:
+            - app_data:/var/lib/postgresql/data
+        env_file:
+            - .env
+    
+    
+    nginx:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        image: nginx:development
+        ports:
+            - 80:80
+            - 443:443
+        depends_on:
+            - django
+        volumes:
+            - static_files:/app/static:ro
+            - media_files:/app/media:ro
