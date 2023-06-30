@@ -21,10 +21,11 @@
       </a>
       <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center  font-bold justify-center">
         <a href="{% url 'home' %}" class="mr-5 text-gray-600  hover:text-yellow-600">Home</a>
-        <a href="" class="mr-5 text-gray-600  hover:text-yellow-500">Explore</a>
-        <a href="" class="mr-5 text-gray-600  hover:text-yellow-600">Create</a>
+        <a href="{% url 'recipe:recipelist' %}" class="mr-5 text-gray-600  hover:text-yellow-500">Explore</a>
+        <a href="{% url 'recipe:recipecreate' %}" class="mr-5 text-gray-600  hover:text-yellow-600">Create</a>
       </nav>
       {% if user.is_authenticated %}
+      <a href="{% url 'users:profile' user.username %}" class="mr-5 text-gray-900  hover:text-yellow-600">Profile</a>
       <a href="{% url 'logout' %}">
         <button class="inline-flex items-center bg-red-300 border-0 py-1 px-3 text-red-600 focus:outline-none hover:text-red-200 rounded text-base mt-4 md:mt-0">Logout
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
@@ -34,7 +35,7 @@
       </a>
 
       {% else %}
-      <a href="{% url 'signup' %}" class="mr-5 text-gray-900  hover:text-yellow-600">Sign up</a>
+      <a href="{% url 'signup'  %}" class="mr-5 text-gray-900  hover:text-yellow-600">Sign up</a>
       <a href="{% url 'login' %}">
         <button class="inline-flex items-center bg-yellow-300 border-0 py-1 px-3 text-yellow-600 focus:outline-none hover:text-yellow-200 rounded text-base mt-4 md:mt-0">Login
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">

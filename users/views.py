@@ -36,8 +36,8 @@ class UserProfileView(LoginRequiredMixin ,DetailView):
 
     def get_context_data(self,**kwargs):
         context=super(UserProfileView,self).get_context_data(**kwargs)
-        organisations=self.get_object().OrganisationModel_User.all()              
-        context["organisations"]=organisations[:6]
+        #organisations=self.get_object().OrganisationModel_User.all()              
+        #context["organisations"]=organisations[:6]
         return context
 
     
