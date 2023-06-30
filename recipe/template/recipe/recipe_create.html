@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body %}
+<form class="mr-40 py-16 px-8 rounded-xl bg-black " method="post">
+
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button>Login</button>
+
+</form>
+{% endblock body %}

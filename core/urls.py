@@ -45,7 +45,7 @@ urlpatterns = [
     path('reset-password-confirm/<uidb64>/<token>/',PasswordResetConfirmView.as_view(),name="password_reset_confirm"),
     path('reset-password-complete/',PasswordResetCompleteView.as_view(),name="password_reset_complete"),
     path('users/',include('users.urls',namespace='users')),
-   # path('recipe/',include('recipe.urls',namespace='recipe')),
+    path('recipe/',include('recipe.urls',namespace='recipe')),
     ]
 
 if settings.DEBUG:
@@ -54,6 +54,6 @@ if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     django_toolbar_panel = [
-        path('__debug__/', include(debug_toolbar.urls),)
+        path('__debug__/', include(debug_toolbar.urls),),
         ] 
     urlpatterns = urlpatterns + django_toolbar_panel
