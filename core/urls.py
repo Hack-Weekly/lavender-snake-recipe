@@ -48,6 +48,8 @@ urlpatterns = [
     path('users/',include('users.urls',namespace='users')),
     path('recipe/',include('recipe.urls',namespace='recipe')),
     path('api/',include('api.urls',namespace='api')),
+    path('summernote/', include('django_summernote.urls')),
+    path('editor/', include('django_summernote.urls')),
     ]
 
 if settings.DEBUG:
