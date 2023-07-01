@@ -9,6 +9,7 @@ class Recipe(models.Model):
     prep_time = models.PositiveIntegerField()
     instructions = models.TextField()
 
+
     def __str__(self):
         return self.name
     
@@ -16,3 +17,4 @@ class Recipe(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
