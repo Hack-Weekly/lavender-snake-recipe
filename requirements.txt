@@ -16,3 +16,12 @@ psycopg2-binary==2.9.1
 https://github.com/benoitc/gunicorn/archive/refs/heads/master.zip#egg=gunicorn==20.1.0
 eventlet==0.33.3
 dnspython==2.3.0
+djangorestframework==3.14.0
+Markdown==3.4.3
+django-filter==23.2
+
+#[dev-packages]
+django-cors-headers==3.14.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
+pycodestyle==2.10.0

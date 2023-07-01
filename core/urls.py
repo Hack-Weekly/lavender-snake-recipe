@@ -47,6 +47,7 @@ urlpatterns = [
     path('reset-password-complete/',PasswordResetCompleteView.as_view(),name="password_reset_complete"),
     path('users/',include('users.urls',namespace='users')),
     path('recipe/',include('recipe.urls',namespace='recipe')),
+    path('api/',include('api.urls',namespace='api')),
     ]
 
 if settings.DEBUG:
