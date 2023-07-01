@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path,include
-from core.views import HomeView
+from core.views import HomeView, DevelopmentView
 from users.views import UserSignupView
 from django.contrib.auth.views import (
                                         LoginView,
@@ -37,6 +37,7 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(),name="home"),
+    path('development/', DevelopmentView.as_view(),name="development"),
     path('login/',LoginView.as_view(),name="login"),
     path('logout/',LogoutView.as_view(),name="logout"),
     path('signup/',UserSignupView.as_view(),name="signup"),

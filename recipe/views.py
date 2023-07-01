@@ -1,9 +1,9 @@
 from django import http
-from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from recipe.models import Recipe
+from recipe.models import Recipe,Tag
 
 class RecipeListView(ListView):
     model = Recipe
@@ -12,20 +12,34 @@ class RecipeListView(ListView):
 class RecipeDetailView(DetailView):
     model = Recipe
     template_name = 'recipe/recipe_detail.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+    
 
 
-class RecipeCreatView(CreateView,LoginRequiredMixin):
+class RecipeCreatView(LoginRequiredMixin,CreateView):
     model = Recipe
     template_name = 'recipe/recipe_create.html'
     form_class=RecipeCreateForm
 
     def form_valid(self,form):
-        form.instance.author=self.request.user
+        recipe=form.save(commit=False)
+        recipe.author=self.request.user
+        recipe.save()
+        custom_tags = form.cleaned_data['custom_tags']
+        if custom_tags:
+            custom_tags = custom_tags.split(' ')
+            for custom_tag in custom_tags:
+                tag, created = Tag.objects.get_or_create(name=custom_tag.strip())
+                recipe.tags.add(tag)
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('recipe:recipedetail',kwargs={'slug':self.object.slug})
 
 
 
-class RecipeUpdateView(UpdateView,LoginRequiredMixin):
+class RecipeUpdateView(LoginRequiredMixin,UpdateView):
     model = Recipe
     template_name = 'recipe/recipe_update.html'
     form_class=RecipeUpdateForm
@@ -36,7 +50,7 @@ class RecipeUpdateView(UpdateView,LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-class RecipeDeleteView(DeleteView,LoginRequiredMixin):
+class RecipeDeleteView(LoginRequiredMixin,DeleteView):
     model = Recipe
     template_name = 'recipe/recipe_delete.html'
     success_url = '/recipe/'

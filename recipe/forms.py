@@ -1,10 +1,13 @@
 from django import forms
-from .models import Recipe
-
+from recipe.models import Recipe
+from recipe.models import Tag
 class RecipeCreateForm(forms.ModelForm):
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+    custom_tags = forms.CharField(max_length=100, required=False)
+
     class Meta:
         model = Recipe
-        fields = ['title', 'ingredients', 'servings', 'prep_time', 'instructions']
+        fields = ['title','recipe_image','tags','custom_tags', 'ingredients', 'servings', 'prep_time', 'instructions']
         widgets = {
             'ingredients': forms.Textarea(attrs={'class': 'h-32 w-96', 'placeholder': 'List ingredients here...'}),
         }
