@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path,include
-from core.views import HomeView
+from core.views import HomeView, DevelopmentView
 from users.views import UserSignupView
 from django.contrib.auth.views import (
                                         LoginView,
@@ -37,6 +37,7 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(),name="home"),
+    path('development/', DevelopmentView.as_view(),name="development"),
     path('login/',LoginView.as_view(),name="login"),
     path('logout/',LogoutView.as_view(),name="logout"),
     path('signup/',UserSignupView.as_view(),name="signup"),
@@ -45,7 +46,10 @@ urlpatterns = [
     path('reset-password-confirm/<uidb64>/<token>/',PasswordResetConfirmView.as_view(),name="password_reset_confirm"),
     path('reset-password-complete/',PasswordResetCompleteView.as_view(),name="password_reset_complete"),
     path('users/',include('users.urls',namespace='users')),
-   # path('recipe/',include('recipe.urls',namespace='recipe')),
+    path('recipe/',include('recipe.urls',namespace='recipe')),
+    path('api/',include('api.urls',namespace='api')),
+    path('summernote/', include('django_summernote.urls')),
+    path('editor/', include('django_summernote.urls')),
     ]
 
 if settings.DEBUG:
@@ -54,6 +58,6 @@ if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     django_toolbar_panel = [
-        path('__debug__/', include(debug_toolbar.urls),)
+        path('__debug__/', include(debug_toolbar.urls),),
         ] 
     urlpatterns = urlpatterns + django_toolbar_panel

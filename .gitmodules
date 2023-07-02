@@ -1,0 +1,3 @@
+[submodule "react-frontend"]
+	path = react-frontend
+	url = https://github.com/GioWashel/recipe-app-react
