@@ -2,7 +2,7 @@ import json
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse
+from django.http import JsonResponse,Http404
 from api.serializers import MyTokenObtainPairSerializer, RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
@@ -106,7 +106,7 @@ class RecipeDetailAPIView(APIView):
             #     for custom_tag in custom_tags:
             #         tag, created = Tag.objects.get_or_create(name=custom_tag.strip())
             #         recipe.tags.add(tag)
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

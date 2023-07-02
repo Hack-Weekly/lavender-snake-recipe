@@ -1,4 +1,5 @@
 from django import http
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from recipe.forms import RecipeCreateForm, RecipeUpdateForm
@@ -46,8 +47,12 @@ class RecipeUpdateView(LoginRequiredMixin,UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().author != self.request.user:
-            raise http.Http403("Privilege Error")
+            raise PermissionDenied("Privilege Error")
+            #code for 403 error
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        return reverse_lazy('recipe:recipedetail',kwargs={'slug':self.object.slug})
 
 
 class RecipeDeleteView(LoginRequiredMixin,DeleteView):

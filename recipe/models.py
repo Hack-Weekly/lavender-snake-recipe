@@ -4,7 +4,7 @@ from django.utils.text import slugify
 class Recipe(models.Model):
     author = models.ForeignKey('users.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    recipe_image=models.ImageField(upload_to='recipe_images', blank=True, null=True)
+    recipe_image=models.ImageField(upload_to='recipe_images',default='recipe_images/default_recipe.jpg', blank=True, null=True)
     tags=models.ManyToManyField('Tag', blank=True)
     slug = models.SlugField(max_length=255, unique=True,blank=True,null=True)
     ingredients = models.TextField()
