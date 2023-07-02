@@ -11,8 +11,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 
+
 from recipe.models import Recipe,Tag
 from api.serializers import RecipeSerializer, RecipeCreateSerializer, RecipeUpdateSerializer
+from django.views.generic import TemplateView
 
 User=get_user_model()
 
@@ -26,6 +28,9 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
+
+class DocsView(TemplateView):
+    template_name = 'api/docs.html'
 
 @api_view(['GET'])
 def getRoutes(request):

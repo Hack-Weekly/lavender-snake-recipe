@@ -12,6 +12,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('test/', views.testEndPoint, name='test'),
+    path('docs/', views.DocsView.as_view(), name='docs'),
     path('recipes/', views.RecipeListAPIView.as_view(), name='recipe-list'),
     path('recipe/<slug:slug>/', views.RecipeDetailAPIView.as_view(), name='recipe-detail'),
     path('', views.getRoutes)

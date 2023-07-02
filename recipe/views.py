@@ -6,15 +6,18 @@ from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipe.models import Recipe,Tag
 
+
 class RecipeListView(ListView):
     model = Recipe
     template_name = 'recipe/recipe_list.html'
+    context_object_name = 'recipes'
 
 class RecipeDetailView(DetailView):
     model = Recipe
     template_name = 'recipe/recipe_detail.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
+    context_object_name = 'recipe'
     
 
 
@@ -62,6 +65,6 @@ class RecipeDeleteView(LoginRequiredMixin,DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().author != self.request.user:
-            raise http.Http403("Privilege Error")
+            raise PermissionDenied("Privilege Error")
         return super().dispatch(request, *args, **kwargs)
     
