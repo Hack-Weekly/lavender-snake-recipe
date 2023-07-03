@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<section class="bg-white dark:bg-gray-900">
+    <div class="container px-6 py-12 mx-auto">
+        <h1 class="text-2xl font-semibold text-gray-800 lg:text-3xl dark:text-white">Guide for Lavender Snake Recipe API(V1.0.0).</h1>
+
+        <div class="mt-8 space-y-8 lg:mt-12">
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <h1 class="font-semibold text-gray-700 dark:text-white">Things to consider for proper API usage:</h1>
+                    <ul class="mt-6 text-sm text-gray-500 dark:text-gray-300 list-disc list-inside">
+                        <li>Authentication: Make sure to include the access token in the Authorization header for endpoints that require authentication.</li>
+                        <li>Permissions: Some endpoints have additional permission requirements. For example, only the author of a recipe can update or delete it.</li>
+                        <li>Error handling: Check the response status codes and messages to handle errors properly. Status codes in the 4xx range indicate client errors, and codes in the 5xx range indicate server errors.</li>
+                        <li>Valid JSON: When sending data in the request body, ensure that it is in valid JSON format.</li>
+                        <li>Slug parameter: For endpoints that require a &lt;slug&gt; parameter, replace it with the actual slug of the desired resource.</li>
+                        <li>Custom tags: When creating or updating(custom_tags are not supported in API V1.0.0 recipe update ) a recipe, you can include custom tags separated by spaces in the custom_tags parameter.</li>
+                    </ul>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Register a new user:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a POST request to <code>/api/register/</code> with the following parameters in the request body:
+                        <br>
+                        <span>username: The username for the new user.</span>
+                        <br>
+                        <span>email: The email address for the new user.</span>
+                        <br>
+                        <span>password: The password for the new user.</span>
+                        <br>
+                        <span>password2: Confirm the password for the new user.</span>
+                        <br>
+                        The response will contain the details of the newly registered user.
+                    </p>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Obtain an access token:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a POST request to <code>/api/token/</code> with the following parameters in the request body:
+                        <br>
+                        <span>username: The username of the user.</span>
+                        <br>
+                        <span>password: The password of the user.</span>
+                        <br>
+                        The response will contain an access token, which should be included in subsequent requests as a bearer token in the Authorization header.
+                    </p>
+                </div>
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Refresh the access token:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        If the access token expires, send a POST request to <code>/api/token/refresh/</code> with the expired access token in the request body.
+                        <br>
+                        The response will contain a new access token, which can be used to replace the expired one.
+                    </p>
+                </div>
+            
+                
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Test an endpoint:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a GET request to <code>/api/test/</code> to test the endpoint. You need to include a valid access token in the Authorization header of the request.
+                        <br>
+                        The response will confirm that the API has successfully responded to the GET request.
+                    </p>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Retrieve a list of recipes:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a GET request to <code>/api/recipes/</code> to retrieve a list of recipes. 
+                        <br>
+                        The response will contain the details of all the recipes available.
+                    </p>
+                </div>
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Retrieve a specific recipe:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a GET request to <code>/api/recipe/{slug}/</code> to retrieve a specific recipe. Replace <code>{slug}</code> with the actual slug of the recipe.
+                        <br>
+                        The response will contain the details of the specified recipe.
+                    </p>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Create a new recipe:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a POST request to <code>/api/recipes/</code> to create a new recipe. You need to include a valid access token in the Authorization header of the request.
+                        <br>
+                        The request body should include the necessary parameters such as title, recipe_image, tags, custom_tags, ingredients, servings, prep_time, and instructions.
+                        <br>
+                        The response will contain the details of the newly created recipe.
+                    </p>
+                </div>
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Update a recipe:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a PUT request to <code>/api/recipe/{slug}/</code> to update a specific recipe. Replace <code>{slug}</code> with the actual slug of the recipe.
+                        <br>
+                        You need to include a valid access token in the Authorization header of the request.
+                        <br>
+                        The request body should include the updated parameters for the recipe.
+                        <br>
+                        The response will contain the details of the updated recipe.
+                    </p>
+                </div>
+            
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Delete a recipe:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a DELETE request to <code>/api/recipe/{slug}/</code> to delete a specific recipe. Replace <code>{slug}</code> with the actual slug of the recipe.
+                        <br>
+                        You need to include a valid access token in the Authorization header of the request.
+                        <br>
+                        The recipe will be deleted, and the response will have a status code of 204 (No Content).
+                    </p>
+                </div>
+
+                
+            
+            </div>
+            
+          
+
+            
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock body %}
+

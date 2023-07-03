@@ -1,1 +1,47 @@
 {% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container mx-auto py-8">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold">{{recipe.title}}</h1>
+      <p class="text-gray-500">By {{ recipe.author }}</p>
+    </div>
+
+    <div class="mt-8">
+      <img src="{{ recipe.recipe_image.url }}" alt="Recipe Image" class="w-full h-auto">
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold">Tags</h2>
+      <ul class="flex space-x-2">
+        {% for tag in recipe.tags.all %}
+        <li class="bg-blue-500 text-white px-4 py-2 rounded">{{ tag }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold">Ingredients</h2>
+      <p class="mt-2">{{ recipe.ingredients }}</p>
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold">Servings</h2>
+      <p class="mt-2">{{ recipe.servings }}</p>
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold">Preparation Time</h2>
+      <p class="mt-2">{{ recipe.prep_time }} minutes</p>
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold">Instructions</h2>
+      <p class="mt-2">{{ recipe.instructions }}</p>
+    </div>
+  </div>
+</body>
+
+
+{% endblock body %}
