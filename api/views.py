@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 
 
 from recipe.models import Recipe,Tag
+from recipe.features import get_similar_recipes_by_tags, search_recipes
 from api.serializers import RecipeSerializer, RecipeCreateSerializer, RecipeUpdateSerializer
 from django.views.generic import TemplateView
 
@@ -66,12 +67,18 @@ def testEndPoint(request):
 
 
 class RecipeListAPIView(APIView):
+
+    permission_classes = []
+
     def get(self, request):
         recipes = Recipe.objects.all()
         serializer = RecipeSerializer(recipes, many=True)
         return Response(serializer.data)
 
     def post(self, request):
+        
+        self.permission_classes = [IsAuthenticated]
+        
         serializer = RecipeCreateSerializer(data=request.data)
         if serializer.is_valid():
             recipe = serializer.save(author=request.user)
@@ -86,6 +93,9 @@ class RecipeListAPIView(APIView):
 
 
 class RecipeDetailAPIView(APIView):
+
+    permission_classes = []
+
     def get_object(self, slug):
         try:
             return Recipe.objects.get(slug=slug)
@@ -98,6 +108,9 @@ class RecipeDetailAPIView(APIView):
         return Response(serializer.data)
 
     def put(self, request, slug):
+        
+        self.permission_classes = [IsAuthenticated]
+        
         recipe = self.get_object(slug)
         if recipe.author != request.user:
             return Response({"error": "Privilege Error"}, status=status.HTTP_403_FORBIDDEN)
@@ -116,8 +129,21 @@ class RecipeDetailAPIView(APIView):
 
 
     def delete(self, request, slug):
+        
+        self.permission_classes = [IsAuthenticated]
+        
         recipe = self.get_object(slug)
         if recipe.author != request.user:
             return Response({"error": "Privilege Error"}, status=status.HTTP_403_FORBIDDEN) 
         recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class RecipeSearchAPIView(APIView):
+    
+    def get(self, request):
+        query = request.query_params.get('query', '')
+        if query == '':
+            return Response({"error": "No query"}, status=status.HTTP_400_BAD_REQUEST)
+        recipes =search_recipes(query)
+        serializer = RecipeSerializer(recipes, many=True)
+        return Response(serializer.data)

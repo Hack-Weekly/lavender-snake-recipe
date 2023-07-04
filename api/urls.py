@@ -15,5 +15,6 @@ urlpatterns = [
     path('docs/', views.DocsView.as_view(), name='docs'),
     path('recipes/', views.RecipeListAPIView.as_view(), name='recipe-list'),
     path('recipe/<slug:slug>/', views.RecipeDetailAPIView.as_view(), name='recipe-detail'),
+    path('search/', views.RecipeSearchAPIView.as_view(), name='recipe-search'),
     path('', views.getRoutes)
 ]

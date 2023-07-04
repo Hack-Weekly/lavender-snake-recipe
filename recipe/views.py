@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipe.models import Recipe,Tag
-
+from recipe.features import get_similar_recipes_by_tags, search_recipes
 
 class RecipeListView(ListView):
     model = Recipe
@@ -18,7 +18,22 @@ class RecipeDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
     context_object_name = 'recipe'
+
+class RecipeSearchView(ListView):
+    model = Recipe
+    template_name = 'recipe/recipe_search.html'
+    context_object_name = 'recipes'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        if query:
+            return search_recipes(query)
+        return Recipe.objects.none()
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('query')
+        return context
 
 
 class RecipeCreatView(LoginRequiredMixin,CreateView):
