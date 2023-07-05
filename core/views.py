@@ -6,5 +6,5 @@ class HomeView(TemplateView):
     template_name="home.html"
 
 class DevelopmentView(TemplateView):
-    template_name="errors/error404.html"
+    template_name="errors/error403.html"
     
