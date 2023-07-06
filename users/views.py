@@ -36,8 +36,8 @@ class UserProfileView(LoginRequiredMixin ,DetailView):
 
     def get_context_data(self,**kwargs):
         context=super(UserProfileView,self).get_context_data(**kwargs)
-        #organisations=self.get_object().OrganisationModel_User.all()              
-        #context["organisations"]=organisations[:6]
+        recipes=self.get_object().user_recipes.all()              
+        context["recipes"]=recipes
         return context
 
     
@@ -55,15 +55,5 @@ class UserProfileUpdateView(LoginRequiredMixin,UpdateView):
             raise Http404("Knock knock , Not you!")
         return super().dispatch(request, *args, **kwargs)
     
-  
-
-
     def get_success_url(self):
         return reverse('users:profile', kwargs={'username': self.request.user.username})
-
-def make_organiser(request):
-   user = User.objects.get(username=request.user.username)
-   user.is_organiser = True
-   user.save()
-   profile_url = reverse('users:profile', kwargs={'username': request.user.username})
-   return redirect(profile_url)

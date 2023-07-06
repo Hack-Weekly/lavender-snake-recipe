@@ -6,6 +6,9 @@ from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipe.models import Recipe,Tag
 from recipe.features import get_similar_recipes_by_tags, search_recipes
+from recipe.features import create_or_add_to_history
+from ipware import get_client_ip
+from recipe.models import UserFavourite,UserHistory
 
 class RecipeListView(ListView):
     model = Recipe
@@ -18,6 +21,12 @@ class RecipeDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
     context_object_name = 'recipe'
+
+    def dispatch(self, request, *args, **kwargs):
+        recipe = self.get_object()
+        create_or_add_to_history(request, recipe)
+        return super().dispatch(request, *args, **kwargs)
+    
 
 class RecipeSearchView(ListView):
     model = Recipe
@@ -83,3 +92,23 @@ class RecipeDeleteView(LoginRequiredMixin,DeleteView):
             raise PermissionDenied("Privilege Error")
         return super().dispatch(request, *args, **kwargs)
     
+    def get_success_url(self):
+        return reverse_lazy('recipe:recipelist')
+    
+class UserHistoryView(ListView):
+    model = Recipe
+    template_name = 'recipe/recipe_history.html'
+    context_object_name = 'recipes'
+
+    def get_queryset(self):
+
+        try:
+            if self.request.user.is_authenticated:
+                return UserHistory.objects.get(user=self.request.user).recipe.all()
+            else:
+                client_ip, is_routable = get_client_ip(self.request)
+                return UserHistory.objects.get(ip_address=client_ip).recipe.all()
+        except Exception as e:
+            return Recipe.objects.none()
+    
+

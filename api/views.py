@@ -12,10 +12,16 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 
 
-from recipe.models import Recipe,Tag
-from recipe.features import get_similar_recipes_by_tags, search_recipes
-from api.serializers import RecipeSerializer, RecipeCreateSerializer, RecipeUpdateSerializer
+from recipe.models import Recipe,Tag,UserHistory,UserFavourite
+from recipe.features import get_similar_recipes_by_tags, search_recipes,create_or_add_to_history
+from api.serializers import (
+                            RecipeSerializer, 
+                            RecipeCreateSerializer, 
+                            RecipeUpdateSerializer,
+                            UserSerializer,
+                            )
 from django.views.generic import TemplateView
+from ipware import get_client_ip
 
 User=get_user_model()
 
@@ -104,6 +110,7 @@ class RecipeDetailAPIView(APIView):
 
     def get(self, request, slug):
         recipe = self.get_object(slug)
+        create_or_add_to_history(request, recipe)
         serializer = RecipeSerializer(recipe)
         return Response(serializer.data)
 
@@ -147,3 +154,38 @@ class RecipeSearchAPIView(APIView):
         recipes =search_recipes(query)
         serializer = RecipeSerializer(recipes, many=True)
         return Response(serializer.data)
+
+class UserProfileAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user
+            recipes = Recipe.objects.filter(author=user)
+            #serialize the request user
+            user= User.objects.get(username=user)
+            user_serializer = UserSerializer(user)
+            recipe_serializer = RecipeSerializer(recipes, many=True)
+            return Response({
+                        "userprofile":user_serializer.data,
+                        "recipes":recipe_serializer.data
+                        })
+        except Exception as e:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+class UserHistoryAPIView(APIView):
+    def get(self, request):
+        try:
+            if request.user.is_authenticated:
+                user_history = UserHistory.objects.get(user=request.user)
+            else:
+                client_ip, is_routable = get_client_ip(request)
+                user_history = UserHistory.objects.get(ip_address=client_ip)
+
+            recipes = user_history.recipe.all()
+            serializer = RecipeSerializer(recipes, many=True)
+
+            return Response(serializer.data)
+        except Exception as e:
+            return Response([])

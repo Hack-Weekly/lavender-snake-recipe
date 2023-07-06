@@ -16,14 +16,16 @@ class TagSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['username','email']
+
+
 
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author=UserSerializer(read_only=True)
     class Meta:
         model = Recipe
-        fields = ['title','author', 'recipe_image', 'tags', 'ingredients', 'servings', 'prep_time', 'instructions']
+        fields = ['title','slug','author', 'recipe_image', 'tags', 'ingredients', 'servings', 'prep_time', 'instructions']
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
