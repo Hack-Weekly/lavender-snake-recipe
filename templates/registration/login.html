@@ -2,39 +2,34 @@
 {% load tailwind_filters %}
 {% load static %}
 {% block body %}
-<div class="min-h-screen flex items-center justify-end bg-gray-50 py-2 px-4 sm:px-6 lg:px-8 bg-no-repeat bg-cover " 
-style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url({% static 'games/assests/login_cover.jpg' %});">
+<div class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+    <div class="px-6 py-12">
+        <div class="flex justify-center mx-auto">
+            <img class="w-auto h-12 sm:h-8" src="{% static 'content/site_logo.jpg' %}" alt="">
+        </div>
 
-    <form class="mr-40 py-16 px-8 rounded-xl bg-black " method="post">
+        <h3 class="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Login</h3>
 
-        {% csrf_token %}
-        {{ form|crispy }}
-        <a class="forget-btn font-normal" href='{% url 'reset-password' %}'>Forgot password?</a>
-        <br>
-        <button>Login</button>
+        <p class="mt-1 text-center text-gray-500 dark:text-gray-400">Welcome Back!</p>
 
-    </form>
+        <form>
+              {% csrf_token %}
+              {{ form|crispy }}
+            <div class="flex items-center justify-between mt-4">
+                <a href="#" class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500">Forget Password?</a>
 
+                <button class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-yellow-600 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-yello-300 focus:ring-opacity-50">
+                    Login 
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
+        <span class="text-sm text-gray-600 dark:text-gray-200">Don't have an account? </span>
+
+        <a href="{% url 'signup' %}" class="mx-2 text-sm font-bold text-yellow-600 dark:text-blue-400 hover:underline">Register</a>
+    </div>
 </div>
-<style>
-    .forget-btn {
-        opacity: 0.4;
-        color: #ff6d00;
-    }
-
-    .forget-btn:hover {
-        opacity: 1;
-    }
-
-    .signup-button {
-        display: block;
-        width: 100%;
-        margin: 1em auto 0;
-        background-color: #ff6d00;
-        padding: 0.5em 2.4em;
-        color: #fff;
-        font-weight: bold;
-    }
-</style>
 
 {% endblock body %}
