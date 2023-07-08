@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipe.models import Recipe,Tag
-from recipe.features import get_similar_recipes_by_tags, search_recipes
+from recipe.features import get_similar_recipes_by_tags, search_recipes,get_similar_recipes
 from recipe.features import create_or_add_to_history
 from ipware import get_client_ip
 from recipe.models import UserFavourite,UserHistory
@@ -20,7 +20,12 @@ class RecipeDetailView(DetailView):
     template_name = 'recipe/recipe_detail.html'
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
-    context_object_name = 'recipe'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        recipe = self.get_object()
+        context['similar_recipes'] = get_similar_recipes(recipe)[:3]
+        return context
 
     def dispatch(self, request, *args, **kwargs):
         recipe = self.get_object()

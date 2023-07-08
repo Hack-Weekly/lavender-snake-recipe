@@ -5,7 +5,7 @@
 
 <section class="bg-white dark:bg-gray-900">
     <div class="container px-6 py-12 mx-auto">
-        <h1 class="text-2xl font-semibold text-gray-800 lg:text-3xl dark:text-white">Guide for Lavender Snake Recipe API(V1.0.0).</h1>
+        <h1 class="text-2xl font-semibold text-gray-800 lg:text-3xl dark:text-white">Guide for Lavender Snake Recipe API(V1.2.1).</h1>
 
         <div class="mt-8 space-y-8 lg:mt-12">
             
@@ -17,7 +17,7 @@
                         <li>Error handling: Check the response status codes and messages to handle errors properly. Status codes in the 4xx range indicate client errors, and codes in the 5xx range indicate server errors.</li>
                         <li>Valid JSON: When sending data in the request body, ensure that it is in valid JSON format.</li>
                         <li>Slug parameter: For endpoints that require a &lt;slug&gt; parameter, replace it with the actual slug of the desired resource.</li>
-                        <li>Custom tags: When creating or updating(custom_tags are not supported in API V1.0.0 recipe update ) a recipe, you can include custom tags separated by spaces in the custom_tags parameter.</li>
+                        <li>Custom tags: When creating or updating(custom_tags are not supported in API V1.2.1 recipe update ) a recipe, you can include custom tags separated by spaces in the custom_tags parameter.</li>
                     </ul>
                 </div>
 
@@ -128,6 +128,7 @@
                         Send a GET request to <code>/api/recipe/{slug}/</code> to retrieve a specific recipe. Replace <code>{slug}</code> with the actual slug of the recipe.
                         <br>
                         The response will contain the details of the specified recipe.
+                        This respone will also contain recommendations for similar recipes.
                     </p>
                 </div>
 
@@ -184,6 +185,36 @@
                         You need to include a valid access token in the Authorization header of the request.
                         <br>
                         The recipe will be deleted, and the response will have a status code of 204 (No Content).
+                    </p>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Search recipes:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a query to <code>/api/search/?query="query"</code> to get recipes. 
+                    </p>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">User History:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a GET request to  <code>/api/history/</code> to get User's history.
+                        <br>
+                        It contains all the recipes that the user has viewed. 
                     </p>
                 </div>
 

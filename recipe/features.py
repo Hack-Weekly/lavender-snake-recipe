@@ -61,3 +61,4 @@ def create_or_add_to_history(request, recipe):
         user_history,created=UserHistory.objects.get_or_create(ip_address=client_ip)
         if not user_history.recipe.filter(pk=recipe.pk).exists():
             user_history.recipe.add(recipe)
+    return user_history

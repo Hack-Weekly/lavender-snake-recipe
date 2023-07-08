@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 
 from recipe.models import Recipe,Tag,UserHistory,UserFavourite
-from recipe.features import get_similar_recipes_by_tags, search_recipes,create_or_add_to_history
+from recipe.features import get_similar_recipes, search_recipes,create_or_add_to_history
 from api.serializers import (
                             RecipeSerializer, 
                             RecipeCreateSerializer, 
@@ -46,8 +46,10 @@ def getRoutes(request):
         '/api/register/',
         '/api/token/refresh/',
         '/api/test/'
-        'recipes/', 
-        'recipes/<slug:slug>',
+        '/recipes/', 
+        '/recipes/<slug:slug>',
+        '/search/', 
+        '/history/',
     ]
     return Response(routes)
 
@@ -110,9 +112,14 @@ class RecipeDetailAPIView(APIView):
 
     def get(self, request, slug):
         recipe = self.get_object(slug)
+        similar_recipe= get_similar_recipes(recipe)
         create_or_add_to_history(request, recipe)
-        serializer = RecipeSerializer(recipe)
-        return Response(serializer.data)
+        recipe_serializer = RecipeSerializer(recipe)
+        similar_recipe_serializer = RecipeSerializer(similar_recipe, many=True)
+        return Response({
+                        "recipe":recipe_serializer.data,
+                        "similar_recipes":similar_recipe_serializer.data
+                        })
 
     def put(self, request, slug):
         
