@@ -1,10 +1,12 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import URLValidator
+
 
 class Recipe(models.Model):
     author = models.ForeignKey('users.User', on_delete=models.CASCADE,related_name='user_recipes')
     title = models.CharField(max_length=255)
-    recipe_image=models.ImageField(upload_to='recipe_images',default='recipe_images/default_recipe.jpg', blank=True, null=True)
+    recipe_image= models.CharField(max_length=200, default="https://source.unsplash.com/8l8Yl2ruUsg", validators=[URLValidator()])
     tags=models.ManyToManyField('Tag', blank=True)
     slug = models.SlugField(max_length=255, unique=True,blank=True,null=True)
     ingredients = models.TextField()
