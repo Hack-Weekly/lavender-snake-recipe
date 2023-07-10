@@ -6,7 +6,7 @@ from django.core.validators import URLValidator
 class Recipe(models.Model):
     author = models.ForeignKey('users.User', on_delete=models.CASCADE,related_name='user_recipes')
     title = models.CharField(max_length=255)
-    recipe_image= models.CharField(max_length=200, default="https://source.unsplash.com/8l8Yl2ruUsg", validators=[URLValidator()])
+    recipe_image= models.URLField(max_length=1000, default="https://source.unsplash.com/8l8Yl2ruUsg", validators=[URLValidator()])
     tags=models.ManyToManyField('Tag', blank=True)
     slug = models.SlugField(max_length=255, unique=True,blank=True,null=True)
     ingredients = models.TextField()

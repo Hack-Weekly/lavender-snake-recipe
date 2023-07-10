@@ -45,7 +45,7 @@ def getRoutes(request):
         '/api/token/',
         '/api/register/',
         '/api/token/refresh/',
-        '/api/test/'
+        '/api/test/',
         '/recipes/', 
         '/recipes/<slug:slug>',
         '/search/', 

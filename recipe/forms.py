@@ -5,7 +5,7 @@ from recipe.models import Tag
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 
 class RecipeCreateForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all()[:10], widget=forms.CheckboxSelectMultiple, required=False)
     custom_tags = forms.CharField(max_length=100, required=False)
 
     class Meta:
