@@ -84,13 +84,12 @@ class RecipeListAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        
         self.permission_classes = [IsAuthenticated]
-        
         serializer = RecipeCreateSerializer(data=request.data)
+
         if serializer.is_valid():
+            custom_tags = serializer.validated_data.pop('custom_tags') # pop the custom_tags key so the serializer doesn't try to save it
             recipe = serializer.save(author=request.user)
-            custom_tags = serializer.validated_data.get('custom_tags')
             if custom_tags:
                 custom_tags = custom_tags.split(' ')
                 for custom_tag in custom_tags:
@@ -131,13 +130,13 @@ class RecipeDetailAPIView(APIView):
 
         serializer = RecipeUpdateSerializer(recipe, data=request.data)
         if serializer.is_valid():
+            custom_tags = serializer.validated_data.pop('custom_tags')
             recipe = serializer.save()
-            # custom_tags = serializer.validated_data.get('custom_tags')
-            # if custom_tags:
-            #     custom_tags = custom_tags.split(' ')
-            #     for custom_tag in custom_tags:
-            #         tag, created = Tag.objects.get_or_create(name=custom_tag.strip())
-            #         recipe.tags.add(tag)
+            if custom_tags:
+                custom_tags = custom_tags.split(' ')
+                for custom_tag in custom_tags:
+                    tag, created = Tag.objects.get_or_create(name=custom_tag.strip())
+                    recipe.tags.add(tag)
             return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
