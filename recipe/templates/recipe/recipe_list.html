@@ -41,4 +41,22 @@
     </div>
   </section>
 
+
+<div class="flex content-center -mt-2">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" class="flex items-center px-4 py-2 mx-1 text-gray-500 bg-white rounded-md hover:bg-yellow-600 hover:text-gray-50  dark:bg-gray-800 dark:text-gray-600">
+      previous
+  </a>
+  {% endif %}
+
+  <a href="?page={{ page_obj.number }}" class="items-center hidden px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md sm:flex dark:bg-gray-800 dark:text-gray-200 hover:bg-yellow-600 dark:hover:bg-yellow-500 hover:text-white dark:hover:text-gray-200">
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+  </a>
+
+
+  <a href="?page={{ page_obj.paginator.num_pages }}" class="flex items-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md dark:bg-gray-800 dark:text-gray-200 hover:bg-yellow-600 dark:hover:bg-yellow-500 hover:text-white dark:hover:text-gray-200">
+      Next
+  </a>
+</div>
+
 {% endblock body %}

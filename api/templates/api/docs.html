@@ -5,7 +5,7 @@
 
 <section class="bg-white dark:bg-gray-900">
     <div class="container px-6 py-12 mx-auto">
-        <h1 class="text-2xl font-semibold text-gray-800 lg:text-3xl dark:text-white">Guide for Lavender Snake Recipe API(V1.2.1).</h1>
+        <h1 class="text-2xl font-semibold text-gray-800 lg:text-3xl dark:text-white">Guide for Lavender Snake Recipe API({{api_version}}).</h1>
 
         <div class="mt-8 space-y-8 lg:mt-12">
             
@@ -17,8 +17,51 @@
                         <li>Error handling: Check the response status codes and messages to handle errors properly. Status codes in the 4xx range indicate client errors, and codes in the 5xx range indicate server errors.</li>
                         <li>Valid JSON: When sending data in the request body, ensure that it is in valid JSON format.</li>
                         <li>Slug parameter: For endpoints that require a &lt;slug&gt; parameter, replace it with the actual slug of the desired resource.</li>
-                        <li>Custom tags: When creating or updating(custom_tags are not supported in API V1.2.1 recipe update ) a recipe, you can include custom tags separated by spaces in the custom_tags parameter.</li>
+                        <li>Custom tags: When creating or updating(custom_tags are not supported in API {{api_version}} recipe update ) a recipe, you can include custom tags separated by spaces in the custom_tags parameter.</li>
                     </ul>
+                </div>
+
+                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
+                    <button class="flex items-center justify-between w-full">
+                        <h1 class="font-semibold text-gray-700 dark:text-white">Retrieve a list of recipes:</h1>
+                        <span class="text-gray-400 bg-gray-200 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
+                            </svg>
+                        </span>
+                    </button>
+                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
+                        Send a GET request to <code>/api/recipes/</code> to retrieve a list of recipes. 
+                    </p>
+                    <div class="mt-6 p-4 text-sm text-gray-500 dark:text-gray-300 border-2 border-gray-500 rounded-2xl">    
+                        <br>
+    
+
+                        <p>Handles GET requests and returns the paginated list of recipes.</p>
+                                            
+                        <h3>Request Parameters</h3>
+                                            
+                        <p>None</p>
+                                            
+                        <h3>Response</h3>
+                                            
+                        <ul>
+                          <li><strong>Status Code:</strong> 200 OK</li>
+                          <li><strong>Response Body:</strong></li>
+                        </ul>
+                        
+                        <pre>
+                        {
+                          "count": The total number of recipes available,
+                          "next": The URL for the next page of recipes, if available,
+                          "previous": The URL for the previous page of recipes, if available,
+                          "results": An array of recipe objects
+                        }
+                        </pre>
+
+                        The response will contain the details of all the recipes available.
+                    
+                    </div>    
                 </div>
 
                 <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
@@ -99,21 +142,7 @@
                     </p>
                 </div>
 
-                <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
-                    <button class="flex items-center justify-between w-full">
-                        <h1 class="font-semibold text-gray-700 dark:text-white">Retrieve a list of recipes:</h1>
-                        <span class="text-gray-400 bg-gray-200 rounded-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6" />
-                            </svg>
-                        </span>
-                    </button>
-                    <p class="mt-6 text-sm text-gray-500 dark:text-gray-300">
-                        Send a GET request to <code>/api/recipes/</code> to retrieve a list of recipes. 
-                        <br>
-                        The response will contain the details of all the recipes available.
-                    </p>
-                </div>
+             
             
                 <div class="p-8 bg-gray-100 rounded-lg dark:bg-gray-800">
                     <button class="flex items-center justify-between w-full">

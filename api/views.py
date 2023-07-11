@@ -11,7 +11,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 
-
+from api.custom_pagination import RecipePagination
 from recipe.models import Recipe,Tag,UserHistory,UserFavourite
 from recipe.features import get_similar_recipes, search_recipes,create_or_add_to_history
 from api.serializers import (
@@ -23,8 +23,10 @@ from api.serializers import (
 from django.views.generic import TemplateView
 from ipware import get_client_ip
 
+
 User=get_user_model()
 
+api_version = 'V1.2.5'
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -38,6 +40,11 @@ class RegisterView(generics.CreateAPIView):
 
 class DocsView(TemplateView):
     template_name = 'api/docs.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["api_version"] = api_version
+        return context
+    
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -77,11 +84,14 @@ def testEndPoint(request):
 class RecipeListAPIView(APIView):
 
     permission_classes = []
+    pagination_class=RecipePagination
 
     def get(self, request):
         recipes = Recipe.objects.all()
-        serializer = RecipeSerializer(recipes, many=True)
-        return Response(serializer.data)
+        paginator = self.pagination_class()  
+        paginated_recipes = paginator.paginate_queryset(recipes, request)  #paginating
+        serializer = RecipeSerializer(paginated_recipes, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         self.permission_classes = [IsAuthenticated]

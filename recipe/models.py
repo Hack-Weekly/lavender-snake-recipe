@@ -14,6 +14,9 @@ class Recipe(models.Model):
     prep_time = models.PositiveIntegerField()
     instructions = models.TextField()
 
+    def recipe_image_url(self):
+        return self.recipe_image
+
     def __str__(self):
         return self.title
     
