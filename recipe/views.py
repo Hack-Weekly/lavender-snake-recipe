@@ -5,14 +5,21 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from recipe.forms import RecipeCreateForm, RecipeUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from recipe.models import Recipe,Tag
-from recipe.features import get_similar_recipes_by_tags, search_recipes,get_similar_recipes
-from recipe.features import create_or_add_to_history
+from recipe.features import search_recipes,get_similar_recipes,create_or_add_to_history
+from recipe.features import  add_or_remove_favourite
 from ipware import get_client_ip
 from recipe.models import UserFavourite,UserHistory
+from django.contrib.auth import get_user_model
+#import login_required
+from django.contrib.auth.decorators import login_required
+from django.views import View
+User=get_user_model()
+
 
 class RecipeListView(ListView):
     model = Recipe
     paginate_by = 9
+    ordering = ['id']
     template_name = 'recipe/recipe_list.html'
     context_object_name = 'recipes'
 
@@ -25,7 +32,9 @@ class RecipeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         recipe = self.get_object()
-        context['similar_recipes'] = get_similar_recipes(recipe)[:3]
+        #check if user is logged in and if the recipe is in the user's favourite list else return False 
+        context['is_favourite'] = UserFavourite.objects.filter(user=self.request.user, recipe=recipe).exists() if self.request.user.is_authenticated else False
+        context['similar_recipes'] = get_similar_recipes(recipe)[:3] 
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -116,5 +125,30 @@ class UserHistoryView(ListView):
                 return UserHistory.objects.get(ip_address=client_ip).recipe.all()
         except Exception as e:
             return Recipe.objects.none()
+        
+
+class UserFavouriteView(LoginRequiredMixin,View):
+    '''
+        Note:
+        For future implementation if seperate page for favourite  needed .
+        currently favourite recipes are shown in the user profile page,
+        And to add or remove favourite, function(handle_favourite_request) 
+        is seperately implemented.
+   
+    if get request is made then return all the favourite recipes of the user
+    else if post request is made then add or  the recipe to/from the favourite list of the user.
+    '''
+    
+    def get(request):
+        pass
+    
+
+    def post(request,slug):
+        add_or_remove_favourite(request=request, slug=slug)
+
+@login_required
+def handle_favourite(request,slug):
+    add_or_remove_favourite(request=request, slug=slug)
+    return http.HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
 

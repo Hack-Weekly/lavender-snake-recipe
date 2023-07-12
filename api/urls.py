@@ -1,6 +1,7 @@
 from django.urls import path
 from api import views
 
+
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
@@ -14,9 +15,12 @@ urlpatterns = [
     path('test/', views.testEndPoint, name='test'),
     path('docs/', views.DocsView.as_view(), name='docs'),
     path('recipes/', views.RecipeListAPIView.as_view(), name='recipe-list'),
-    path('recipe/<slug:slug>/', views.RecipeDetailAPIView.as_view(), name='recipe-detail'),
+    path('recipe/<slug:slug>/', views.RecipeDetailAPIView.as_view(), name='recipe_detail'),
+    path('recipe/<slug:slug>/favourite/', views.UserFavouriteAPIView.as_view(), name='recipe_favourite'),
     path('search/', views.RecipeSearchAPIView.as_view(), name='recipe-search'),
     path('history/', views.UserHistoryAPIView.as_view(), name='recipe-history'),
+    path('favourites/', views.UserFavouriteAPIView.as_view(), name='user_favourite'),
+
 
     path('', views.getRoutes)
 ]

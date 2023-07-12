@@ -2,10 +2,11 @@ from django.http.response import Http404
 from django.shortcuts import render,reverse,redirect
 from django.views.generic import CreateView,DetailView, UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CustomUserCreationForm,UserUpdateForm
+from users.forms import CustomUserCreationForm,UserUpdateForm
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.contrib import messages
+from recipe.models import UserFavourite
 User=get_user_model()
 
 
@@ -36,8 +37,11 @@ class UserProfileView(LoginRequiredMixin ,DetailView):
 
     def get_context_data(self,**kwargs):
         context=super(UserProfileView,self).get_context_data(**kwargs)
-        recipes=self.get_object().user_recipes.all()              
+        recipes=self.object.user_recipes.all()
+        favourite_recipes=self.object.user_favourite.first()
+        favourite_recipes=self.object.user_favourite.first().recipe.all() if favourite_recipes else None           
         context["recipes"]=recipes
+        context["favourite_recipes"]=favourite_recipes
         return context
 
     

@@ -11,9 +11,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 
+
 from api.custom_pagination import RecipePagination
 from recipe.models import Recipe,Tag,UserHistory,UserFavourite
-from recipe.features import get_similar_recipes, search_recipes,create_or_add_to_history
+from recipe.features import (get_similar_recipes, 
+                            search_recipes,
+                            create_or_add_to_history,
+                            add_or_remove_favourite,
+                            )
 from api.serializers import (
                             RecipeSerializer, 
                             RecipeCreateSerializer, 
@@ -26,7 +31,7 @@ from ipware import get_client_ip
 
 User=get_user_model()
 
-api_version = 'V1.2.5'
+api_version = 'V1.2.7'
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -53,10 +58,11 @@ def getRoutes(request):
         '/api/register/',
         '/api/token/refresh/',
         '/api/test/',
-        '/recipes/', 
-        '/recipes/<slug:slug>',
-        '/search/', 
-        '/history/',
+        '/api/recipes/', 
+        '/api/recipes/<slug:slug>',
+        '/api/search/', 
+        '/api/history/',
+        '/api/favourites/'
     ]
     return Response(routes)
 
@@ -205,3 +211,25 @@ class UserHistoryAPIView(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response([])
+
+class UserFavouriteAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user
+            recipes = UserFavourite.objects.get(user=user).recipe.all()
+            serializer = RecipeSerializer(recipes, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response([])
+
+    def post(self, request):
+        try:
+            user = request.user
+            slug = request.data.get('slug')
+            add_or_remove_favourite(request, slug)
+            return Response({"success": "Added to favourite"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)

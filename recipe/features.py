@@ -2,7 +2,7 @@ from recipe.models import Recipe,Tag
 from django.db.models import Q
 from recipe.models import UserFavourite,UserHistory
 from ipware import get_client_ip
-
+from django import http
 
 def get_similar_recipes(self):
         """
@@ -50,6 +50,7 @@ def search_recipes(query):
     ).distinct()
     return recipes
 
+
 #is used to create or add to the user history
 def create_or_add_to_history(request, recipe):
     if request.user.is_authenticated:
@@ -62,3 +63,19 @@ def create_or_add_to_history(request, recipe):
         if not user_history.recipe.filter(pk=recipe.pk).exists():
             user_history.recipe.add(recipe)
     return user_history
+
+
+#is used to add or remove recipe from user favourite
+def add_or_remove_favourite(request,slug):
+    '''
+    Add or remove recipe from user favourite
+    '''
+    try:
+        recipe = Recipe.objects.get(slug=slug)
+        user_favourite,created=UserFavourite.objects.get_or_create(user=request.user)
+    except Exception as e:
+        return http.HttpResponseBadRequest()
+    if recipe in user_favourite.recipe.all():
+        user_favourite.recipe.remove(recipe)
+    else:
+        user_favourite.recipe.add(recipe)
