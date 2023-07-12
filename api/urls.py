@@ -17,6 +17,8 @@ urlpatterns = [
     path('recipe/<slug:slug>/', views.RecipeDetailAPIView.as_view(), name='recipe-detail'),
     path('search/', views.RecipeSearchAPIView.as_view(), name='recipe-search'),
     path('history/', views.UserHistoryAPIView.as_view(), name='recipe-history'),
+    path('tags/', views.TagAPIView.as_view(), name='tags'),
+    path('profile/', views.UserProfileAPIView.as_view(), name='profile'),
 
     path('', views.getRoutes)
 ]

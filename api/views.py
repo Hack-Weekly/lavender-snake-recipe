@@ -19,6 +19,7 @@ from api.serializers import (
                             RecipeCreateSerializer, 
                             RecipeUpdateSerializer,
                             UserSerializer,
+                            TagSerializer,
                             )
 from django.views.generic import TemplateView
 from ipware import get_client_ip
@@ -205,3 +206,8 @@ class UserHistoryAPIView(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response([])
+        
+class TagAPIView(APIView):
+    def get(self, request):
+        serializer = TagSerializer(Tag.objects.all(), many=True)
+        return Response(serializer.data)
