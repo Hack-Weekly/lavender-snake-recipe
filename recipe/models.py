@@ -35,7 +35,7 @@ class UserFavourite(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE,related_name='user_favourite')
     recipe = models.ManyToManyField('Recipe',related_name='recipe_favourite')
     def __str__(self):
-        return self.user.username + 'favourite' 
+        return self.user.username + 'favourites' 
 
 class UserHistory(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE,related_name='user_history',null=True)

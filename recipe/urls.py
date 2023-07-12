@@ -7,6 +7,7 @@ from recipe.views import (
                             RecipeDetailView,
                             RecipeSearchView,
                             UserHistoryView,
+                            handle_favourite,
                         )
 app_name = 'recipe'
 
@@ -17,5 +18,6 @@ urlpatterns = [
     path('history/', UserHistoryView.as_view(),name='recipehistory'),
     path('<slug:slug>/', RecipeDetailView.as_view(),name='recipedetail'),
     path('<slug:slug>/update/', RecipeUpdateView.as_view(),name='recipeupdate'),
-    path('<slug:slug>/delete/', RecipeCreatView.as_view(),name='recipedelete'),
+    path('<slug:slug>/delete/', RecipeDeleteView.as_view(),name='recipedelete'),
+    path('<slug:slug>/favourite/',handle_favourite ,name='recipefavourite'),
 ]
