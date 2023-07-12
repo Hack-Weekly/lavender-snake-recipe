@@ -20,7 +20,7 @@ urlpatterns = [
     path('search/', views.RecipeSearchAPIView.as_view(), name='recipe-search'),
     path('history/', views.UserHistoryAPIView.as_view(), name='recipe-history'),
     path('favourites/', views.UserFavouriteAPIView.as_view(), name='user_favourite'),
-
-
+    path('tags/', views.TagAPIView.as_view(), name='tags'),
+    path('profile/', views.UserProfileAPIView.as_view(), name='profile'),
     path('', views.getRoutes)
 ]

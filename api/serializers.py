@@ -11,7 +11,8 @@ User=get_user_model()
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ['name']
+        # fields = ['name']
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

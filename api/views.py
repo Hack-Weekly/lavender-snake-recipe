@@ -24,6 +24,7 @@ from api.serializers import (
                             RecipeCreateSerializer, 
                             RecipeUpdateSerializer,
                             UserSerializer,
+                            TagSerializer,
                             )
 from django.views.generic import TemplateView
 from ipware import get_client_ip
@@ -212,6 +213,7 @@ class UserHistoryAPIView(APIView):
         except Exception as e:
             return Response([])
 
+
 class UserFavouriteAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
@@ -233,3 +235,8 @@ class UserFavouriteAPIView(APIView):
             return Response({"success": "Added to favourite"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": "Something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
+        
+class TagAPIView(APIView):
+    def get(self, request):
+        serializer = TagSerializer(Tag.objects.all(), many=True)
+        return Response(serializer.data)
