@@ -52,17 +52,30 @@ def search_recipes(query):
 
 
 #is used to create or add to the user history
+from django.core.exceptions import MultipleObjectsReturned
+
 def create_or_add_to_history(request, recipe):
     if request.user.is_authenticated:
-        user_history,created = UserHistory.objects.get_or_create(user=request.user)
-        if not user_history.recipe.filter(pk=recipe.pk).exists():
-            user_history.recipe.add(recipe)
+        try:
+            user_history = UserHistory.objects.get(user=request.user)
+        except UserHistory.DoesNotExist:
+            user_history = UserHistory.objects.create(user=request.user)
+        except MultipleObjectsReturned:
+            user_history = UserHistory.objects.filter(user=request.user).first()
     else:
         client_ip, is_routable = get_client_ip(request)
-        user_history,created=UserHistory.objects.get_or_create(ip_address=client_ip)
-        if not user_history.recipe.filter(pk=recipe.pk).exists():
-            user_history.recipe.add(recipe)
+        try:
+            user_history = UserHistory.objects.get(ip_address=client_ip)
+        except UserHistory.DoesNotExist:
+            user_history = UserHistory.objects.create(ip_address=client_ip)
+        except MultipleObjectsReturned:
+            user_history = UserHistory.objects.filter(ip_address=client_ip).first()
+
+    if not user_history.recipe.filter(pk=recipe.pk).exists():
+        user_history.recipe.add(recipe)
+
     return user_history
+
 
 
 #is used to add or remove recipe from user favourite
