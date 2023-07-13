@@ -105,7 +105,7 @@ class RecipeListAPIView(APIView):
         serializer = RecipeCreateSerializer(data=request.data)
 
         if serializer.is_valid():
-            custom_tags = serializer.validated_data.pop('custom_tags') # pop the custom_tags key so the serializer doesn't try to save it
+            custom_tags = serializer.validated_data.pop('custom_tags', None) # if key doesn't exist return None instead of typeError
             recipe = serializer.save(author=request.user)
             if custom_tags:
                 custom_tags = custom_tags.split(' ')
@@ -147,7 +147,7 @@ class RecipeDetailAPIView(APIView):
 
         serializer = RecipeUpdateSerializer(recipe, data=request.data)
         if serializer.is_valid():
-            custom_tags = serializer.validated_data.pop('custom_tags')
+            custom_tags = serializer.validated_data.pop('custom_tags', None) # prevent keyError if no custom_tags provided
             recipe = serializer.save()
             if custom_tags:
                 custom_tags = custom_tags.split(' ')
