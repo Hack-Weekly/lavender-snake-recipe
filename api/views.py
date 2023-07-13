@@ -227,10 +227,9 @@ class UserFavouriteAPIView(APIView):
         except Exception as e:
             return Response([])
 
-    def post(self, request):
+    def post(self, request, slug):
         try:
             user = request.user
-            slug = request.data.get('slug')
             add_or_remove_favourite(request, slug)
             return Response({"success": "Added to favourite"}, status=status.HTTP_200_OK)
         except Exception as e:
