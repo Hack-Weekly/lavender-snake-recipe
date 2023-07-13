@@ -105,7 +105,7 @@ class RecipeListAPIView(APIView):
         serializer = RecipeCreateSerializer(data=request.data)
 
         if serializer.is_valid():
-            custom_tags = serializer.validated_data.pop('custom_tags', None) # if key doesn't exist return None instead of typeError
+            custom_tags = serializer.validated_data.pop('custom_tags', None) # pop the custom_tags key so the serializer doesn't try to save it
             recipe = serializer.save(author=request.user)
             if custom_tags:
                 custom_tags = custom_tags.split(' ')
@@ -148,6 +148,7 @@ class RecipeDetailAPIView(APIView):
         serializer = RecipeUpdateSerializer(recipe, data=request.data)
         if serializer.is_valid():
             custom_tags = serializer.validated_data.pop('custom_tags', None) # prevent keyError if no custom_tags provided
+
             recipe = serializer.save()
             if custom_tags:
                 custom_tags = custom_tags.split(' ')
@@ -227,10 +228,9 @@ class UserFavouriteAPIView(APIView):
         except Exception as e:
             return Response([])
 
-    def post(self, request):
+    def post(self, request, slug):
         try:
             user = request.user
-            slug = request.data.get('slug')
             add_or_remove_favourite(request, slug)
             return Response({"success": "Added to favourite"}, status=status.HTTP_200_OK)
         except Exception as e:
