@@ -7,12 +7,29 @@ from recipe.models import Recipe, Tag
 class RecipeListAPIViewTest(APITestCase):
 
     def setUp(self):
+
+        
+
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.tag1 = Tag.objects.create(name='Tag1')
         self.tag2 = Tag.objects.create(name='Tag2')
-        self.recipe1 = Recipe.objects.create(title='Recipe 1', author=self.user)
+        self.recipe1 = Recipe.objects.create(
+            author=self.user,
+            title='Recipe 1',
+            ingredients='Ingredient 1, Ingredient 2',
+            servings=4,
+            prep_time=30,
+            instructions='Step 1, Step 2, Step 3'
+        )
         self.recipe1.tags.add(self.tag1)
-        self.recipe2 = Recipe.objects.create(title='Recipe 2', author=self.user)
+        self.recipe2 = Recipe.objects.create(
+            author=self.user,
+            title='Recipe 2',
+            ingredients='Ingredient 1, Ingredient 2',
+            servings=4,
+            prep_time=30,
+            instructions='Step 1, Step 2, Step 3'
+        )
         self.recipe2.tags.add(self.tag2)
 
     def test_get_recipe_list(self):
@@ -56,16 +73,23 @@ class RecipeDetailAPIViewTest(APITestCase):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.tag1 = Tag.objects.create(name='Tag1')
         self.tag2 = Tag.objects.create(name='Tag2')
-        self.recipe = Recipe.objects.create(title='Test Recipe', author=self.user)
+        self.recipe = Recipe.objects.create(
+            author=self.user,
+            title='Recipe 3',
+            ingredients='Ingredient 1, Ingredient 2',
+            servings=4,
+            prep_time=30,
+            instructions='Step 1, Step 2, Step 3'
+        )
         self.recipe.tags.add(self.tag1)
 
     def test_get_recipe_detail(self):
         url = reverse('api:recipe_detail', args=[self.recipe.slug])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['title'], 'Test Recipe')
-        self.assertEqual(response.data['author']['username'], 'testuser')
-        self.assertIn(self.tag1.pk, [tag['id'] for tag in response.data['tags']])
+        self.assertEqual(response.data['recipe']['title'], 'Recipe 3')
+        self.assertEqual(response.data['recipe']['author']['username'], 'testuser')
+        self.assertIn(self.tag1.pk, [tag['id'] for tag in response.data['recipe']['tags']])
 
     def test_put_recipe(self):
         url = reverse('api:recipe_detail', args=[self.recipe.slug])
@@ -103,8 +127,24 @@ class RecipeSearchAPIViewTest(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.recipe1 = Recipe.objects.create(title='Pasta Recipe', author=self.user, ingredients='Pasta, Sauce')
-        self.recipe2 = Recipe.objects.create(title='Pizza Recipe', author=self.user, ingredients='Dough, Cheese')
+        #self.recipe1 = Recipe.objects.create(title='Pasta Recipe', author=self.user, ingredients='Pasta, Sauce')
+        self.recipe1=Recipe.objects.create(
+            author=self.user,
+            title='Pasta Recipe',
+            ingredients='Pasta, Sauce',
+            servings=4,
+            prep_time=30,
+            instructions='Step 1, Step 2, Step 3'
+        )
+        #self.recipe2 = Recipe.objects.create(title='Pizza Recipe', author=self.user, ingredients='Dough, Cheese')
+        self.recipe2 = Recipe.objects.create(
+            author=self.user,
+            title='Pizza Recipe',
+            ingredients='Dough, Cheese',
+            servings=4,
+            prep_time=30,
+            instructions='Step 1, Step 2, Step 3'
+        )
 
     def test_search_recipes(self):
         url = reverse('api:recipe-search')

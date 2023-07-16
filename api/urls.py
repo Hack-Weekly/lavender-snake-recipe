@@ -22,5 +22,5 @@ urlpatterns = [
     path('favourites/', views.UserFavouriteAPIView.as_view(), name='user_favourite'),
     path('tags/', views.TagAPIView.as_view(), name='tags'),
     path('profile/', views.UserProfileAPIView.as_view(), name='profile'),
-    path('', views.getRoutes)
+    path('', views.getRoutes,name='routes')
 ]

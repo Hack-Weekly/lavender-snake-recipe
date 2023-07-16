@@ -69,6 +69,5 @@ class UrlsTestCase(TestCase):
         self.assertEqual(resolve(url).func.view_class, UserProfileAPIView)
 
     def test_default_url(self):
-        url = reverse('api:getRoutes')
-        print(url)
+        url = reverse('api:routes')
         self.assertEqual(resolve(url).func, getRoutes)
